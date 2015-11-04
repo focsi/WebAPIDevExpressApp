@@ -11,6 +11,7 @@ using System.Web.Http.OData.Query;
 using System.Web.Http.OData.Routing;
 using WebAPIDevExpressApp.Models;
 using Microsoft.Data.OData;
+using System.Web.Http.OData.Extensions;
 
 namespace WebAPIDevExpressApp.Controllers
 {
@@ -28,6 +29,13 @@ namespace WebAPIDevExpressApp.Controllers
     {
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
+        class Result
+        {
+            public IEnumerable<ElemiMunka> Results { get; set; }
+
+            public int TotalCount { get; set; }
+
+        }
         // GET: odata/ElemiMunkas
         public IHttpActionResult GetElemiMunkas(ODataQueryOptions<ElemiMunka> queryOptions)
         {
@@ -41,8 +49,11 @@ namespace WebAPIDevExpressApp.Controllers
                 return BadRequest(ex.Message);
             }
 
-            // return Ok<IEnumerable<ElemiMunka>>(elemiMunkas);
-            return StatusCode(HttpStatusCode.NotImplemented);
+            var munkak = ElemiMunka.GetPage(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value, queryOptions.Top.Value );
+            Request.ODataProperties().TotalCount = ElemiMunka.GetCount() ;
+
+            return Ok<IEnumerable<ElemiMunka>>(munkak.AsQueryable() );
+            //return StatusCode(HttpStatusCode.NotImplemented);
         }
 
         // GET: odata/ElemiMunkas(5)

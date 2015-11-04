@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Http.OData.Query;
 
 namespace WebAPIDevExpressApp.Models
 {
@@ -35,5 +36,43 @@ namespace WebAPIDevExpressApp.Models
         public string MAIN_ICON { get; set; }
         public string ICON0 { get; set; }
         public string ICON1 { get; set; }
+
+        private const int COUNT = 1000;
+        public static int GetCount()
+        {
+            return COUNT;
+        }
+        public static IEnumerable<ElemiMunka> GetAll()
+        {
+            using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
+            {
+                mirtuszDC.Connection.Open();
+                return mirtuszDC.VELEMIMUNKAINMLISTs.Take(COUNT).Select(dbe => new ElemiMunka()
+                {
+                    AZONOSITO = dbe.AZONOSITO,
+                    CIM = dbe.CIM,
+                    MAIN = dbe.MAIN,
+                    KESZULTSEG = dbe.KESZULTSEG,
+                    PRIORITAS = dbe.PRIORITAS
+                }).ToArray();
+            }
+        }
+
+        internal static IEnumerable<ElemiMunka> GetPage(int skip, int top)
+        {
+            using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
+            {
+                mirtuszDC.Connection.Open();
+                return mirtuszDC.VELEMIMUNKAINMLISTs.Skip(skip).Take(top).Select(dbe => new ElemiMunka()
+                {
+                    AZONOSITO = dbe.AZONOSITO,
+                    CIM = dbe.CIM,
+                    MAIN = dbe.MAIN,
+                    KESZULTSEG = dbe.KESZULTSEG,
+                    PRIORITAS = dbe.PRIORITAS
+                }).ToArray();
+            }
+
+        }
     }
 }
