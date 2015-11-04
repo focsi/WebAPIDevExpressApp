@@ -1,0 +1,47 @@
+﻿<html ng-app="myApp">
+<head runat="server">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="/Content/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/dx.light.css" />
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/angular-sanitize.js"></script>
+    <script src="~/Scripts/jquery.globalize/globalize.js"></script>
+    <script src="~/Scripts/dx.webappjs.debug.js"></script>
+    <script src="~/Scripts/app/index.js"></script>
+</head>
+<body ng-controller="gridCtrl">
+    <div class="row">
+        <div class="col-sm-12" style="height:600px; margin: 0 auto" dx-data-grid="{
+            dataSource: elemiMunkakList,
+            allowColumnResizing: true,
+            columns: [
+                { dataField: 'AZONOSITO', width: 50, caption: 'ID' },
+                { dataField: 'CIM', allowGrouping: false, caption: 'Cím' },
+                { dataField: 'MAIN', allowResizing: true, sortIndex: 0, sortOrder: 'asc', allowGrouping: true, caption: 'Normatevékenység' },
+                { dataField: 'KESZULTSEG', visible: false, caption: 'Készültség' },
+                { dataField: 'PRIORITAS', width: 65, allowGrouping: false, caption: 'Prioritás' },
+            ],
+            columnChooser: { enabled: true },
+            allowColumnReordering: true,
+            sorting: { mode: 'multiple' },
+            groupPanel: { visible: true, emptyPanelText: 'Ide dobd az oszlop fejlécét a csoportosításhoz.' },
+            pager: { visible: true },
+            paging: { pageSize: 20 },
+            editing: {
+                editEnabled: true,
+                editMode: 'row',
+                insertEnabled: true,
+                removeEnabled: true
+            },
+            filterRow: { visible: true },
+            searchPanel: { visible: true },
+            selection: { mode: 'none' }
+        }">
+        </div>
+    </div>
+</body>
+</html>
+
