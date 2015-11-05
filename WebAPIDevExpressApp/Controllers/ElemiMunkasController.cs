@@ -41,15 +41,17 @@ namespace WebAPIDevExpressApp.Controllers
         {
             // validate the query.
             try
-            {
+           {
                 queryOptions.Validate(_validationSettings);
             }
             catch (ODataException ex)
             {
                 return BadRequest(ex.Message);
             }
+            //var munkak = ElemiMunka.GetPage(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value, queryOptions.Top.Value);
 
-            var munkak = ElemiMunka.GetPage(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value, queryOptions.Top.Value );
+
+            var munkak = ElemiMunka.GetPage(queryOptions);
             Request.ODataProperties().TotalCount = ElemiMunka.GetCount() ;
 
             return Ok<IEnumerable<ElemiMunka>>(munkak.AsQueryable() );

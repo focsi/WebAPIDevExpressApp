@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http.OData.Query;
 
@@ -36,6 +37,7 @@ namespace WebAPIDevExpressApp.Models
         public string MAIN_ICON { get; set; }
         public string ICON0 { get; set; }
         public string ICON1 { get; set; }
+        public static object Valtozo { get; private set; }
 
         private const int COUNT = 1000;
         public static int GetCount()
@@ -73,6 +75,34 @@ namespace WebAPIDevExpressApp.Models
                 }).ToArray();
             }
 
+        }
+
+        public static IEnumerable<ElemiMunka> GetPage(ODataQueryOptions<ElemiMunka> queryOptions)
+        {
+            using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
+            {
+                string cim = null;
+                mirtuszDC.Connection.Open();
+                var micsoda = queryOptions.ApplyTo(
+                    mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value)
+                        .Take(queryOptions.Top.Value).Select(dbe => new ElemiMunka()
+                        {
+                            AZONOSITO = dbe.AZONOSITO,
+                            CIM = dbe.CIM,
+                            MAIN = dbe.MAIN,
+                            KESZULTSEG = dbe.KESZULTSEG,
+                            PRIORITAS = dbe.PRIORITAS
+                        }));
+
+                return mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).Select(dbe => new ElemiMunka()
+                {
+                    AZONOSITO = dbe.AZONOSITO,
+                    CIM = dbe.CIM,
+                    MAIN = dbe.MAIN,
+                    KESZULTSEG = dbe.KESZULTSEG,
+                    PRIORITAS = dbe.PRIORITAS
+                }).ToArray();
+            }
         }
     }
 }
