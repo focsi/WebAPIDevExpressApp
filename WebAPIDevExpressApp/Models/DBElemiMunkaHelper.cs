@@ -35,7 +35,9 @@ namespace WebAPIDevExpressApp.Models
                 if (queryOptions.Filter != null)
                 {
                     IQueryable query = queryOptions.ApplyTo(mirtuszDC.VELEMIMUNKAINMLISTs);
-                    return query.Cast<VELEMIMUNKAINMLIST>().Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
+                    var a = query.Provider.Execute< IEnumerable<VELEMIMUNKAINMLIST>>(query.Expression);
+                    return a.ToArray();
+//                    return a.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
                 }
                 return mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
             }

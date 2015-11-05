@@ -48,8 +48,6 @@ namespace WebAPIDevExpressApp.Controllers
             Request.ODataProperties().TotalCount = count;
 
             return Ok<IEnumerable<VELEMIMUNKAINMLIST>>(munkak.AsQueryable());
-            // return Ok<IEnumerable<VELEMIMUNKAINMLIST>>(vELEMIMUNKAINMLISTs);
-            //return StatusCode(HttpStatusCode.NotImplemented);
         }
 
         // GET: odata/DBElemiMunka(5)
