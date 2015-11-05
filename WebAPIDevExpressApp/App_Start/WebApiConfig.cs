@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MIRTUSZContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -15,8 +16,8 @@ namespace WebAPIDevExpressApp
             // Web API configuration and services
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<ElemiMunka>("ElemiMunkas");
+            builder.EntitySet<VELEMIMUNKAINMLIST>("DBElemiMunka");
             config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 

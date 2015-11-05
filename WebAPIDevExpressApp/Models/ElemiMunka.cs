@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http.OData.Query;
+using MIRTUSZContext;
 
 namespace WebAPIDevExpressApp.Models
 {
@@ -108,6 +109,19 @@ namespace WebAPIDevExpressApp.Models
                     PRIORITAS = dbe.PRIORITAS
                 }).ToArray();
             }
+        }
+        internal static IEnumerable<VELEMIMUNKAINMLIST> GetDbPage(ODataQueryOptions<VELEMIMUNKAINMLIST> queryOptions)
+        {
+            using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
+            {
+                mirtuszDC.Connection.Open();
+                if (queryOptions.Filter != null)
+                {
+                    IQueryable query = queryOptions.ApplyTo(mirtuszDC.VELEMIMUNKAINMLISTs );
+                    return query.Cast<VELEMIMUNKAINMLIST>().Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
+                }
+                return mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
+           }
         }
     }
 }

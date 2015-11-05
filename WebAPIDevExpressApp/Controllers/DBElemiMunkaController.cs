@@ -9,8 +9,9 @@ using System.Web.Http.ModelBinding;
 using System.Web.Http.OData;
 using System.Web.Http.OData.Query;
 using System.Web.Http.OData.Routing;
-using WebAPIDevExpressApp.Models;
+using MIRTUSZContext;
 using Microsoft.Data.OData;
+using WebAPIDevExpressApp.Models;
 using System.Web.Http.OData.Extensions;
 
 namespace WebAPIDevExpressApp.Controllers
@@ -20,39 +21,38 @@ namespace WebAPIDevExpressApp.Controllers
 
     using System.Web.Http.OData.Builder;
     using System.Web.Http.OData.Extensions;
-    using WebAPIDevExpressApp.Models;
+    using MIRTUSZContext;
     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<ElemiMunka>("ElemiMunkas");
+    builder.EntitySet<VELEMIMUNKAINMLIST>("DBElemiMunka");
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
-    public class ElemiMunkasController : ODataController
+    public class DBElemiMunkaController : ODataController
     {
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
-        // GET: odata/ElemiMunkas
-        public IHttpActionResult GetElemiMunkas(ODataQueryOptions<ElemiMunka> queryOptions)
+        // GET: odata/DBElemiMunka
+        public IHttpActionResult GetDBElemiMunka(ODataQueryOptions<VELEMIMUNKAINMLIST> queryOptions)
         {
             // validate the query.
             try
-           {
+            {
                 queryOptions.Validate(_validationSettings);
             }
             catch (ODataException ex)
             {
                 return BadRequest(ex.Message);
             }
-            //var munkak = ElemiMunka.GetPage(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value, queryOptions.Top.Value);
 
+            var munkak = ElemiMunka.GetDbPage(queryOptions);
+            Request.ODataProperties().TotalCount = ElemiMunka.GetCount();
 
-            var munkak = ElemiMunka.GetPage(queryOptions);
-            Request.ODataProperties().TotalCount = ElemiMunka.GetCount() ;
-
-            return Ok<IEnumerable<ElemiMunka>>(munkak.AsQueryable() );
+            return Ok<IEnumerable<VELEMIMUNKAINMLIST>>(munkak.AsQueryable());
+            // return Ok<IEnumerable<VELEMIMUNKAINMLIST>>(vELEMIMUNKAINMLISTs);
             //return StatusCode(HttpStatusCode.NotImplemented);
         }
 
-        // GET: odata/ElemiMunkas(5)
-        public IHttpActionResult GetElemiMunka([FromODataUri] decimal key, ODataQueryOptions<ElemiMunka> queryOptions)
+        // GET: odata/DBElemiMunka(5)
+        public IHttpActionResult GetVELEMIMUNKAINMLIST([FromODataUri] long key, ODataQueryOptions<VELEMIMUNKAINMLIST> queryOptions)
         {
             // validate the query.
             try
@@ -64,12 +64,12 @@ namespace WebAPIDevExpressApp.Controllers
                 return BadRequest(ex.Message);
             }
 
-            // return Ok<ElemiMunka>(elemiMunka);
+            // return Ok<VELEMIMUNKAINMLIST>(vELEMIMUNKAINMLIST);
             return StatusCode(HttpStatusCode.NotImplemented);
         }
 
-        // PUT: odata/ElemiMunkas(5)
-        public IHttpActionResult Put([FromODataUri] decimal key, Delta<ElemiMunka> delta)
+        // PUT: odata/DBElemiMunka(5)
+        public IHttpActionResult Put([FromODataUri] long key, Delta<VELEMIMUNKAINMLIST> delta)
         {
             Validate(delta.GetEntity());
 
@@ -80,16 +80,16 @@ namespace WebAPIDevExpressApp.Controllers
 
             // TODO: Get the entity here.
 
-            // delta.Put(elemiMunka);
+            // delta.Put(vELEMIMUNKAINMLIST);
 
             // TODO: Save the patched entity.
 
-            // return Updated(elemiMunka);
+            // return Updated(vELEMIMUNKAINMLIST);
             return StatusCode(HttpStatusCode.NotImplemented);
         }
 
-        // POST: odata/ElemiMunkas
-        public IHttpActionResult Post(ElemiMunka elemiMunka)
+        // POST: odata/DBElemiMunka
+        public IHttpActionResult Post(VELEMIMUNKAINMLIST vELEMIMUNKAINMLIST)
         {
             if (!ModelState.IsValid)
             {
@@ -98,13 +98,13 @@ namespace WebAPIDevExpressApp.Controllers
 
             // TODO: Add create logic here.
 
-            // return Created(elemiMunka);
+            // return Created(vELEMIMUNKAINMLIST);
             return StatusCode(HttpStatusCode.NotImplemented);
         }
 
-        // PATCH: odata/ElemiMunkas(5)
+        // PATCH: odata/DBElemiMunka(5)
         [AcceptVerbs("PATCH", "MERGE")]
-        public IHttpActionResult Patch([FromODataUri] decimal key, Delta<ElemiMunka> delta)
+        public IHttpActionResult Patch([FromODataUri] long key, Delta<VELEMIMUNKAINMLIST> delta)
         {
             Validate(delta.GetEntity());
 
@@ -115,16 +115,16 @@ namespace WebAPIDevExpressApp.Controllers
 
             // TODO: Get the entity here.
 
-            // delta.Patch(elemiMunka);
+            // delta.Patch(vELEMIMUNKAINMLIST);
 
             // TODO: Save the patched entity.
 
-            // return Updated(elemiMunka);
+            // return Updated(vELEMIMUNKAINMLIST);
             return StatusCode(HttpStatusCode.NotImplemented);
         }
 
-        // DELETE: odata/ElemiMunkas(5)
-        public IHttpActionResult Delete([FromODataUri] decimal key)
+        // DELETE: odata/DBElemiMunka(5)
+        public IHttpActionResult Delete([FromODataUri] long key)
         {
             // TODO: Add delete logic here.
 
