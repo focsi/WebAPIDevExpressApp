@@ -40,6 +40,8 @@ namespace WebAPIDevExpressApp.Models
         public string MAIN_ICON { get; set; }
         public string ICON0 { get; set; }
         public string ICON1 { get; set; }
+
+
         public static object Valtozo { get; private set; }
 
         private const int COUNT = 1000;
@@ -48,6 +50,7 @@ namespace WebAPIDevExpressApp.Models
         {
             return COUNT;
         }
+
         public static IEnumerable<ElemiMunka> GetAll()
         {
             using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
@@ -109,19 +112,6 @@ namespace WebAPIDevExpressApp.Models
                     PRIORITAS = dbe.PRIORITAS
                 }).ToArray();
             }
-        }
-        internal static IEnumerable<VELEMIMUNKAINMLIST> GetDbPage(ODataQueryOptions<VELEMIMUNKAINMLIST> queryOptions)
-        {
-            using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
-            {
-                mirtuszDC.Connection.Open();
-                if (queryOptions.Filter != null)
-                {
-                    IQueryable query = queryOptions.ApplyTo(mirtuszDC.VELEMIMUNKAINMLISTs );
-                    return query.Cast<VELEMIMUNKAINMLIST>().Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
-                }
-                return mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).ToArray();
-           }
         }
     }
 }

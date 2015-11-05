@@ -43,8 +43,9 @@ namespace WebAPIDevExpressApp.Controllers
                 return BadRequest(ex.Message);
             }
 
-            var munkak = ElemiMunka.GetDbPage(queryOptions);
-            Request.ODataProperties().TotalCount = ElemiMunka.GetCount();
+            var munkak = DBElemiMunkaHelper.GetDbPage(queryOptions);
+            int count = DBElemiMunkaHelper.GetCount(queryOptions);
+            Request.ODataProperties().TotalCount = count;
 
             return Ok<IEnumerable<VELEMIMUNKAINMLIST>>(munkak.AsQueryable());
             // return Ok<IEnumerable<VELEMIMUNKAINMLIST>>(vELEMIMUNKAINMLISTs);

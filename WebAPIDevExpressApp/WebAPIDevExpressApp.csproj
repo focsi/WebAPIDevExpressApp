@@ -188,6 +188,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MIRTUSZDataContext.lqml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DBElemiMunkaHelper.cs" />
     <Compile Include="Models\ElemiMunka.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
