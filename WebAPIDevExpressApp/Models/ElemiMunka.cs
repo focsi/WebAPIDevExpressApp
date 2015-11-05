@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http.OData.Query;
@@ -10,6 +11,7 @@ namespace WebAPIDevExpressApp.Models
 {
     public class ElemiMunka
     {
+        #region Props
         [Key]
         public decimal AZONOSITO { get; set; }
         public string MAIN { get; set; }
@@ -40,6 +42,7 @@ namespace WebAPIDevExpressApp.Models
         public static object Valtozo { get; private set; }
 
         private const int COUNT = 1000;
+        #endregion
         public static int GetCount()
         {
             return COUNT;
@@ -81,18 +84,20 @@ namespace WebAPIDevExpressApp.Models
         {
             using (MIRTUSZContext.MIRTUSZDataContext mirtuszDC = new MIRTUSZContext.MIRTUSZDataContext())
             {
-                string cim = null;
                 mirtuszDC.Connection.Open();
-                var micsoda = queryOptions.ApplyTo(
-                    mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value)
-                        .Take(queryOptions.Top.Value).Select(dbe => new ElemiMunka()
-                        {
-                            AZONOSITO = dbe.AZONOSITO,
-                            CIM = dbe.CIM,
-                            MAIN = dbe.MAIN,
-                            KESZULTSEG = dbe.KESZULTSEG,
-                            PRIORITAS = dbe.PRIORITAS
-                        }));
+                if (queryOptions.Filter != null)
+                {
+                    var micsoda = mirtuszDC.VELEMIMUNKAINMLISTs.Select(dbe => new ElemiMunka()
+                    {
+                        AZONOSITO = dbe.AZONOSITO,
+                        CIM = dbe.CIM,
+                        MAIN = dbe.MAIN,
+                        KESZULTSEG = dbe.KESZULTSEG,
+                        PRIORITAS = dbe.PRIORITAS
+                    });
+                    var a = queryOptions.ApplyTo(micsoda);
+
+                }
 
                 return mirtuszDC.VELEMIMUNKAINMLISTs.Skip(queryOptions.Skip == null ? 0 : queryOptions.Skip.Value).Take(queryOptions.Top.Value).Select(dbe => new ElemiMunka()
                 {
