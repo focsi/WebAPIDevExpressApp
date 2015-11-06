@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using System.Web.Http.ModelBinding;
 using System.Web.Http.OData;
 using System.Web.Http.OData.Query;
@@ -13,9 +15,28 @@ using MIRTUSZContext;
 using Microsoft.Data.OData;
 using WebAPIDevExpressApp.Models;
 using System.Web.Http.OData.Extensions;
+using System.Web.Mvc;
 
 namespace WebAPIDevExpressApp.Controllers
 {
+    public class RequireHttpsAttribute : AuthorizationFilterAttribute
+    {
+        public override void OnAuthorization(HttpActionContext actionContext)
+        {
+            if (actionContext.Request.RequestUri.Scheme != Uri.UriSchemeHttps)
+            {
+                actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = "HTTPS Required"
+                };
+            }
+            else
+            {
+                base.OnAuthorization(actionContext);
+            }
+        }
+    }
+
     /*
     The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
 
@@ -31,6 +52,7 @@ namespace WebAPIDevExpressApp.Controllers
         private static ODataValidationSettings _validationSettings = new ODataValidationSettings();
 
         // GET: odata/DBElemiMunka
+        [RequireHttps]
         public IHttpActionResult GetDBElemiMunka(ODataQueryOptions<VELEMIMUNKAINMLIST> queryOptions)
         {
             // validate the query.
@@ -51,6 +73,7 @@ namespace WebAPIDevExpressApp.Controllers
         }
 
         // GET: odata/DBElemiMunka(5)
+        [RequireHttps]
         public IHttpActionResult GetVELEMIMUNKAINMLIST([FromODataUri] long key, ODataQueryOptions<VELEMIMUNKAINMLIST> queryOptions)
         {
             // validate the query.
@@ -68,6 +91,7 @@ namespace WebAPIDevExpressApp.Controllers
         }
 
         // PUT: odata/DBElemiMunka(5)
+        [RequireHttps]
         public IHttpActionResult Put([FromODataUri] long key, Delta<VELEMIMUNKAINMLIST> delta)
         {
             Validate(delta.GetEntity());
@@ -88,6 +112,7 @@ namespace WebAPIDevExpressApp.Controllers
         }
 
         // POST: odata/DBElemiMunka
+        [RequireHttps]
         public IHttpActionResult Post(VELEMIMUNKAINMLIST vELEMIMUNKAINMLIST)
         {
             if (!ModelState.IsValid)
@@ -102,7 +127,8 @@ namespace WebAPIDevExpressApp.Controllers
         }
 
         // PATCH: odata/DBElemiMunka(5)
-        [AcceptVerbs("PATCH", "MERGE")]
+        [System.Web.Http.AcceptVerbs("PATCH", "MERGE")]
+        [RequireHttps]
         public IHttpActionResult Patch([FromODataUri] long key, Delta<VELEMIMUNKAINMLIST> delta)
         {
             Validate(delta.GetEntity());
@@ -123,6 +149,7 @@ namespace WebAPIDevExpressApp.Controllers
         }
 
         // DELETE: odata/DBElemiMunka(5)
+        [RequireHttps]
         public IHttpActionResult Delete([FromODataUri] long key)
         {
             // TODO: Add delete logic here.
